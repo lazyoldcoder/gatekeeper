@@ -1,0 +1,145 @@
+  :root {
+    color-scheme: light dark;
+    --bg: #121212;
+    --fg: #eaeaea;
+    --accent: #2cf7a9;
+    --muted: #888;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 20px;
+  }
+
+  h2, h3 {
+    color:#e6f0eb;
+    margin: 3px;
+  }
+
+
+  .app-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    padding: 8px;
+    margin-top: 50px;
+    background-color: rgb(6, 119, 104);
+    border-bottom: 3px solid #9625d8;
+  }
+
+  .header-text h2, .header-text h4 {
+    margin-bottom: 1px;
+    margin-top: 20px;
+  }
+
+
+  .app-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    padding: 10px 10px 10px 0px;
+    flex-wrap: wrap;
+  }
+
+  button, .import-label {
+    background: #1e1e1e;
+    min-width: 160px;
+    color: var(--fg);
+    border: 1px solid #d82323;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 18px;
+  }
+
+  .import-label input {
+    display: none;
+
+  }
+
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto; /* safety for narrow screens */
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid #d42424;
+    
+    padding: 5px;
+    text-align: left;
+    min-height: 24px; 
+    height: 24px;
+    min-width: 120px; /* keeps cell readable on small screens */
+  }
+
+  td[contenteditable="true"] {
+    background: #181818;
+    outline: none;
+    border-radius: 4px;
+  }
+
+  tr {
+    touch-action: pan-y; /* allow vertical scroll, we handle swipe horizontally */
+  }
+
+  .hint {
+    color: var(--muted);
+    padding: 8px 16px;
+  }
+
+  /* Detail panel slides in from the right on swipe */
+  .detail-panel {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: min(90vw, 420px);
+    background: #101010;
+    border-left: 1px solid #9186ce;
+    transform: translateX(100%);
+    transition: transform 0.25s ease-out;
+    z-index: 1000;
+  }
+
+  .detail-panel.open {
+    transform: translateX(0);
+  }
+
+  .detail-content {
+    padding: 16px;
+  }
+
+  .detail-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .detail-field {
+    margin: 12px 0;
+  }
+
+  .detail-field label {
+    display: block;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .detail-field input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #a7e0c1;
+    background: #181818;
+    color: var(--fg);
+  }
