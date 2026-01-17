@@ -10,26 +10,10 @@ const clearBtn = document.getElementById('clearBtn');
 
 const COLUMNS = ['A','B','C','D'];
 
+// ---------------- Backend URL ----------------
+const BACKEND_URL = 'https://gatekeeper-gtvr.onrender.com'; // your Render backend URL
 
-
-
-
-
-
-// Open IndexedDB
-function openDB(callback) {
-  const request = indexedDB.open('tableDB', 1);
-  request.onupgradeneeded = e => {
-    const db = e.target.result;
-    if (!db.objectStoreNames.contains('tableStore')) {
-      db.createObjectStore('tableStore');
-    }
-  };
-  request.onsuccess = () => callback(request.result);
-  request.onerror = e => console.error('IndexedDB error', e);
-}
-
-// Save table to IndexedDB
+// ---------------- Save / Load table ----------------
 function saveTable() {
   const data = [];
   tableBody.querySelectorAll('tr').forEach(tr => {
@@ -38,29 +22,24 @@ function saveTable() {
     data.push(row);
   });
 
-  openDB(db => {
-    const tx = db.transaction('tableStore', 'readwrite');
-    const store = tx.objectStore('tableStore');
-    store.put(data, 'tableData');
-    tx.oncomplete = () => console.log('Table saved', data);
-    tx.onerror = e => console.error('Save failed', e);
-  });
+  fetch(`${BACKEND_URL}/save`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(r => console.log('Table saved', r))
+  .catch(err => console.error('Save error', err));
 }
 
-// Load table from IndexedDB (iOS-safe)
 function loadTable() {
   isLoading = true;
   tableBody.innerHTML = '';
 
-  openDB(db => {
-    const tx = db.transaction('tableStore', 'readonly');
-    const store = tx.objectStore('tableStore');
-    const req = store.get('tableData');
-
-    req.onsuccess = () => {
-      const data = req.result || [];
-      if (data.length === 0) {
-        // No saved data → create empty row and save it
+  fetch(`${BACKEND_URL}/load`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data || data.length === 0) {
         createRow();
         saveTable();
       } else {
@@ -68,76 +47,15 @@ function loadTable() {
       }
       isLoading = false;
       console.log('Table loaded', data);
-    };
-
-    req.onerror = e => {
-      console.error('Load failed', e);
+    })
+    .catch(err => {
+      console.error('Load error', err);
       isLoading = false;
-      createRow(); // fallback empty row
-    };
-  });
+      createRow();
+    });
 }
 
-
-
-
-// // IndexedDB helper
-// function openDB(callback) {
-//   const request = indexedDB.open('tableDB', 1);
-//   request.onupgradeneeded = e => {
-//     const db = e.target.result;
-//     if (!db.objectStoreNames.contains('tableStore')) {
-//       db.createObjectStore('tableStore');
-//     }
-//   };
-//   request.onsuccess = () => callback(request.result);
-//   request.onerror = e => console.error('IndexedDB error', e);
-// }
-
-// // Save table
-// function saveTable() {
-//   const data = [];
-//   tableBody.querySelectorAll('tr').forEach(tr => {
-//     const row = {};
-//     tr.querySelectorAll('td').forEach((td, i) => row[COLUMNS[i]] = td.textContent);
-//     data.push(row);
-//   });
-
-//   openDB(db => {
-//     const tx = db.transaction('tableStore', 'readwrite');
-//     tx.objectStore('tableStore').put(data, 'tableData');
-//   });
-// }
-
-// // Load table
-// function loadTable() {
-//   isLoading = true;
-//   tableBody.innerHTML = '';
-
-//   openDB(db => {
-//     const tx = db.transaction('tableStore', 'readonly');
-//     const store = tx.objectStore('tableStore');
-//     const req = store.get('tableData');
-  
-//     req.onsuccess = () => {
-//       const data = req.result || [];
-//       if (data.length === 0) createRow();
-//       else data.forEach(row => createRow(row));
-//       isLoading = false;
-//       saveTable(); // one clean save after load
-//     };
-//   });
-// }
-
-
-
-
-
-
-
-
-
-// Create row
+// ---------------- Table manipulation ----------------
 function createRow(data = {A:'',B:'',C:'',D:''}) {
   const tr = document.createElement('tr');
   COLUMNS.forEach(col => {
@@ -152,23 +70,20 @@ function createRow(data = {A:'',B:'',C:'',D:''}) {
   tableBody.appendChild(tr);
 }
 
-
-// Buttons
+// ---------------- Buttons ----------------
 addRowBtn.addEventListener('click', () => createRow());
+
 clearBtn.addEventListener('click', () => {
   tableBody.innerHTML = '';
   createRow();
   saveTable();
 });
 
-// Export JSON from IndexedDB
+// Export JSON
 exportBtn.addEventListener('click', () => {
-  openDB(db => {
-    const tx = db.transaction('tableStore', 'readonly');
-    const store = tx.objectStore('tableStore');
-    const req = store.get('tableData');
-    req.onsuccess = () => {
-      const data = req.result || [];
+  fetch(`${BACKEND_URL}/load`)
+    .then(res => res.json())
+    .then(data => {
       const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -176,8 +91,8 @@ exportBtn.addEventListener('click', () => {
       a.download = 'table.json';
       a.click();
       URL.revokeObjectURL(url);
-    };
-  });
+    })
+    .catch(err => console.error('Export error', err));
 });
 
 // Import JSON
@@ -194,14 +109,8 @@ importFile.addEventListener('change', e => {
   reader.readAsText(file);
 });
 
-
-
-
-// Optional: save before app is closed/backgrounded
+// ---------------- Final safety ----------------
 window.addEventListener('beforeunload', saveTable);
 
-
-// Initial load
+// ---------------- Initial load ----------------
 loadTable();
-
-
