@@ -20,8 +20,10 @@ app.use((req, res, next) => {
 // ----------------------
 // Google Sheets Setup
 // ----------------------
-// const KEYFILEPATH = path.join(__dirname, 'gatekeeper-key.json'); // JSON key file
 
+
+const keyJson = process.env.GATEKEEPER_KEY_JSON;
+if (!keyJson) throw new Error("GATEKEEPER_KEY_JSON is not set in environment variables");
 
 
 
@@ -30,16 +32,11 @@ app.use((req, res, next) => {
 
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-// const SPREADSHEET_ID = 'YOUR_SHEET_ID'; // <-- replace with your actual Sheet ID
+
 const SPREADSHEET_ID = '10Hu6HPf8h7jIAr6ENU-JDctFg5IDesp9169wPN5TFtA';
 
 // https://docs.google.com/spreadsheets/d/10Hu6HPf8h7jIAr6ENU-JDctFg5IDesp9169wPN5TFtA/edit?gid=0#gid=0
 const SHEET_NAME = 'Sheet1';             // <-- replace with your tab name if different
-
-// const auth = new google.auth.GoogleAuth({
-//   keyFile: KEYFILEPATH,
-//   scopes: SCOPES,
-// });
 
 
 const auth = new google.auth.GoogleAuth({
