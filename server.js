@@ -87,6 +87,16 @@ app.post('/save', async (req, res) => {
   }
 });
 
+
+// Serve frontend files
+app.use(express.static(path.join(__dirname))); // serves index.html, styles.css, app.js, icons/, etc.
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+
+
 // ----------------------
 // Start Server
 // ----------------------
