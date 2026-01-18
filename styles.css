@@ -15,59 +15,198 @@
     font-size: 20px;
   }
 
-  h2, h3 {
+  h2, h3 ,h4 {
     color:#e6f0eb;
     margin: 3px;
   }
 
 
+
+
+
   .app-header {
+    position: sticky;
+    top: 10px;              /* sticks to top of viewport */
+    z-index: 100;        /* stay above table rows */
+    background-color: rgb(6, 119, 104); /* must have a background */
+    
     display: flex;
     align-items: flex-end;
     gap: 12px;
     padding: 8px;
-    margin-top: 50px;
+    margin: 10px 8px 5px 5px;
     background-color: rgb(6, 119, 104);
-    border-bottom: 3px solid #9625d8;
+    border-bottom: 0px solid #9625d8;
   }
 
   .header-text h2, .header-text h4 {
     margin-bottom: 1px;
-    margin-top: 20px;
+    margin-top: 1px;
   }
 
+  .header-text h2 {
+    font-size: 26pt;   
+  }  
 
   .app-icon {
-    width: 28px;
-    height: 28px;
+    width: 80px;
+    height: 80px;
   }
 
-  .toolbar {
+
+
+  .toolbartop {
+    position: sticky;
+    top: 118px;
+    z-index: 100;        /* stay above table rows */
+  }
+
+
+
+
+
+
+
+
+  .toolbartop, .toolbarbot {
     display: flex;
+    justify-content:space-between; 
+    align-items: center;
     gap: 10px;
-    padding: 10px 10px 10px 0px;
+    padding: 10px 5px 10px 5px;
     flex-wrap: wrap;
   }
 
+
+
+
+
+
+
+
+
+
+
+
   button, .import-label {
-    background: #1e1e1e;
-    min-width: 160px;
+    background: #276d06;
+    min-width: 45%;
+    min-height: 60px;
     color: var(--fg);
     border: 1px solid #d82323;
     padding: 8px;
     border-radius: 8px;
-    font-size: 18px;
+    font-size: 20pt;
   }
+
+
+  #addRowBtn, #addRowBtnb {
+    background: #9b7530;
+  }
+
+
+
+  #exportBtn, #exportBtnb {
+    background: #616126;
+  }
+
+
+
+
 
   .import-label input {
     display: none;
 
   }
 
+
+
   .table-wrap {
-    width: 100%;
-    overflow-x: auto; /* safety for narrow screens */
+      width: 100%;
+      padding: 5px;
+      box-sizing: border-box;
+      /* DON'T put overflow here */
+      /* overflow-x: auto;  <-- remove this */
   }
+
+  
+  
+  /* this is not working  */
+  #dataTable thead th {
+      position: sticky;
+      top: 0px;                  /* sticks to top of scroll container */
+      background-color: #101010; /* solid background */
+      z-index: 80;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  /* .table-wrapper { */
+    /* overflow-x: auto; enable horizontal scroll */
+    /* -webkit-overflow-scrolling: touch; smooth scroll for iOS */
+    /* padding: 5px;  */
+  /* } */
+
+  
+.table-wrapper {
+    overflow-x: auto;        /* horizontal scroll only */
+    -webkit-overflow-scrolling: touch;
+}
+
+
+
+
+  /* #dataTable { */
+    /* width: 100%;       ensures table stretches within wrapper */
+    /* min-width: 600px;  optional: ensures table doesn’t shrink too small */
+    /* border-collapse: collapse; */
+  /* } */
+
+
+
+
+
+
+
+  #dataTable {
+    width: 100%;               /* fill wrapper */
+    table-layout: fixed;       /* respects column widths */
+    border-collapse: collapse;
+    min-width: 0;              /* allow shrink on mobile */
+  }
+
+  /* .table-wrap {
+    width: 100%;
+    padding: 5px 5px 5px 5px; 
+    box-sizing: border-box;
+    overflow-x: auto;         
+    -webkit-overflow-scrolling: touch;
+  } */
+
+
+
+
+
+
+
+
+  #dataTable th, #dataTable td {
+    border: 5px solid #a823c9;
+    /* padding: 8px; */
+    text-align: left;
+  }
+
+
+ 
 
   table {
     width: 100%;
@@ -143,3 +282,81 @@
     background: #181818;
     color: var(--fg);
   }
+
+
+
+  /* Make table responsive */
+.table-container {
+  width: 100%;
+  overflow-x: auto; /* allows horizontal scroll if needed */
+  -webkit-overflow-scrolling: touch; /* smooth scroll on iPhone */
+}
+
+/* Table styling */
+#dataTable {
+  width: 100%;
+  table-layout: fixed; /* columns respect assigned widths */
+  border-collapse: collapse;
+}
+
+#dataTable th,
+#dataTable td {
+  padding: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: left;
+  font-size: 16px; /* readable on iPhone 11 */
+  border: 1px solid #22d6be;
+}
+
+/* Column widths for two columns */
+#dataTable th:nth-child(1),
+#dataTable td:nth-child(1) { width: 65%; }  /* First column */
+#dataTable th:nth-child(2),
+#dataTable td:nth-child(2) { width: 35%; }  /* Second column */
+
+/* Optional: adjust font and padding for smaller screens */
+@media (max-width: 414px) { /* iPhone 11 width 414*/
+    
+  
+  #dataTable th, #dataTable td {
+    font-size: 20pt;
+    padding: 8px;
+    width: auto;
+  }
+}
+
+
+
+/* Base editable cell */
+td[contenteditable="true"] {
+  background: #181818;        /* dark base */
+  outline: none;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  padding: 8px;               /* slightly bigger for touch */
+  font-size: 18px;            /* bigger font on mobile */
+}
+
+/* On focus: pop out */
+td[contenteditable="true"]:focus {
+  background-color: #0f0cc7;   /* slightly lighter background */
+  outline: 2px solid #2cf7a9;  /* glowing accent border */
+  box-shadow: 0 0 8px #2cf7a9; /* subtle glow effect */
+  transform: scale(1.02);      /* tiny pop-out effect */
+  z-index: 10;                 /* pop above neighbors */
+}
+
+/* Optional: hover highlight (desktop or touch highlight) */
+td[contenteditable="true"]:hover {
+  background-color: #5c0404;
+  cursor: text;
+}
+
+/* Optional mobile tweak */
+@media (max-width: 414px) {
+  td[contenteditable="true"] {
+    font-size: 19px;  /* slightly bigger text on small screens */
+    padding: 10px;
+  }
+}

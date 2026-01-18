@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
 const bodyParser = require('body-parser');
+const { google } = require('googleapis');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -9,34 +10,86 @@ const PORT = process.env.PORT || 10000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const DATA_FILE = './data.json';
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store');
+  next();
+});
 
-// Initialize data.json if it doesn't exist
-if (!fs.existsSync(DATA_FILE)) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify([]));
+
+
+// ----------------------
+// Google Sheets Setup
+// ----------------------
+const KEYFILEPATH = path.join(__dirname, 'gatekeeper-key.json'); // JSON key file
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+// const SPREADSHEET_ID = 'YOUR_SHEET_ID'; // <-- replace with your actual Sheet ID
+const SPREADSHEET_ID = '10Hu6HPf8h7jIAr6ENU-JDctFg5IDesp9169wPN5TFtA';
+
+// https://docs.google.com/spreadsheets/d/10Hu6HPf8h7jIAr6ENU-JDctFg5IDesp9169wPN5TFtA/edit?gid=0#gid=0
+const SHEET_NAME = 'Sheet1';             // <-- replace with your tab name if different
+
+const auth = new google.auth.GoogleAuth({
+  keyFile: KEYFILEPATH,
+  scopes: SCOPES,
+});
+
+// Helper: read sheet
+async function readSheet() {
+  const client = await auth.getClient();
+  const sheets = google.sheets({ version: 'v4', auth: client });
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: SHEET_NAME,
+  });
+  return res.data.values || [];
 }
 
-// GET /load → returns current table
-app.get('/load', (req, res) => {
+// Helper: write sheet (overwrite all rows)
+async function writeSheet(data) {
+  const client = await auth.getClient();
+  const sheets = google.sheets({ version: 'v4', auth: client });
+  await sheets.spreadsheets.values.update({
+    spreadsheetId: SPREADSHEET_ID,
+    range: SHEET_NAME,
+    valueInputOption: 'RAW',
+    requestBody: {
+      values: data,
+    },
+  });
+}
+
+// ----------------------
+// Routes
+// ----------------------
+
+// GET /load → return current table
+app.get('/load', async (req, res) => {
   try {
-    const data = JSON.parse(fs.readFileSync(DATA_FILE));
+    const data = await readSheet();
+    console.log('Data from Sheets:', data);
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to read data' });
+    console.error('Sheets API error:', err.response ? err.response.data : err);
+    res.status(500).json({ error: 'Failed to read data', details: err.message });
   }
 });
 
-// POST /save → saves table data
-app.post('/save', (req, res) => {
+
+// POST /save → save table data
+app.post('/save', async (req, res) => {
   try {
-    const data = req.body;
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    const data = req.body; // expected to be an array of rows
+    await writeSheet(data);
     res.json({ status: 'ok' });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to save data' });
+    console.error(err);
+    res.status(500).json({ error: 'Failed to save data to Google Sheets' });
   }
 });
 
+// ----------------------
+// Start Server
+// ----------------------
 app.listen(PORT, () => {
   console.log(`Gatekeeper backend running on port ${PORT}`);
 });
