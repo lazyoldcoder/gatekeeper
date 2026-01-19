@@ -99,44 +99,92 @@ function loadTable() {
 
 // ---------------- CREATE ROW Table manipulation ----------------
 
+// function createRow(data = []) {
+//   const tr = document.createElement('tr');
+//   for (let i = 0; i < COLUMNS.length; i++) {
+
+
+//     const td = document.createElement('td');
+
+    
+//     td.contentEditable = "true";
+//     td.textContent = data[i] || '';
+//     td.setAttribute('autocomplete', 'off');
+//     td.setAttribute('autocorrect', 'off');
+//     td.setAttribute('autocapitalize', 'off');
+//     td.setAttribute('spellcheck', 'false');
+
+
+
+
+
+
+
+//     // ---------------- Autosave with 3-second debounce + blur-save ----------------
+//     let saveTimeout;
+
+//     td.addEventListener('input', () => {
+//       if (isLoading) return;
+//       clearTimeout(saveTimeout);
+//       saveTimeout = setTimeout(saveTable, 3000); // 3s after last keystroke
+//     });
+
+//     td.addEventListener('blur', () => {
+//       if (isLoading) return;
+//       clearTimeout(saveTimeout); // cancel any pending debounce
+//       saveTable();               // save immediately when leaving cell
+//     });
+
+//     tr.appendChild(td);
+//   }
+//   tableBody.appendChild(tr);
+// }
+
+
+
 function createRow(data = []) {
   const tr = document.createElement('tr');
   for (let i = 0; i < COLUMNS.length; i++) {
-
-
     const td = document.createElement('td');
-    td.contentEditable = "true";
-    td.textContent = data[i] || '';
-    td.setAttribute('autocomplete', 'off');
-    td.setAttribute('autocorrect', 'off');
-    td.setAttribute('autocapitalize', 'off');
-    td.setAttribute('spellcheck', 'false');
-
-
-
-
-
-
-
-    // ---------------- Autosave with 3-second debounce + blur-save ----------------
+    
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = data[i] || '';
+    input.autocomplete = 'off';
+    input.autocorrect = 'off';
+    input.autocapitalize = 'off';
+    input.spellcheck = false;
+    input.style.width = '100%';
+    input.style.background = 'transparent';
+    input.style.color = 'inherit';
+    input.style.border = 'none';
+    input.style.fontSize = 'inherit';
+    input.style.fontFamily = 'inherit';
+    
     let saveTimeout;
-
-    td.addEventListener('input', () => {
-      if (isLoading) return;
+    input.addEventListener('input', () => {
       clearTimeout(saveTimeout);
-      saveTimeout = setTimeout(saveTable, 3000); // 3s after last keystroke
+      saveTimeout = setTimeout(saveTable, 3000);
+    });
+    input.addEventListener('blur', () => {
+      clearTimeout(saveTimeout);
+      saveTable();
     });
 
-    td.addEventListener('blur', () => {
-      if (isLoading) return;
-      clearTimeout(saveTimeout); // cancel any pending debounce
-      saveTable();               // save immediately when leaving cell
-    });
-
+    td.appendChild(input);
     tr.appendChild(td);
   }
   tableBody.appendChild(tr);
 }
+
+
+
+
+
+
+
+
+
 
 
 // ---------------- Buttons ----------------
