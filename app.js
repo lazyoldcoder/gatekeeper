@@ -102,9 +102,21 @@ function loadTable() {
 function createRow(data = []) {
   const tr = document.createElement('tr');
   for (let i = 0; i < COLUMNS.length; i++) {
+
+
     const td = document.createElement('td');
     td.contentEditable = "true";
     td.textContent = data[i] || '';
+    td.setAttribute('autocomplete', 'off');
+    td.setAttribute('autocorrect', 'off');
+    td.setAttribute('autocapitalize', 'off');
+    td.setAttribute('spellcheck', 'false');
+
+
+
+
+
+
 
     // ---------------- Autosave with 3-second debounce + blur-save ----------------
     let saveTimeout;

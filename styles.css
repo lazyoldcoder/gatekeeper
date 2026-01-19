@@ -41,7 +41,7 @@ h2, h3 ,h4 {
 }
 
 .header-text h2 {
-  font-size: 26pt;   
+  font-size: 34px;   
 }  
 
 .app-icon {
@@ -74,7 +74,7 @@ button, .import-label {
   padding: 8px;
   
   border-radius: 8px;
-  font-size: 20pt;
+  font-size: 26px;
 }
 
 #addRowBtn, #addRowBtnb {
@@ -143,21 +143,6 @@ button, .import-label {
   /* padding: 8px; */
   /* text-align: left; */
 /* } */
-
-#dataTable {
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-}
-
-#dataTable th,
-#dataTable td {
-  padding: 8px;
-  border: 1px solid #22d6be;
-  word-wrap: break-word;
-}
-
-
 
 table {
   width: 100%;
@@ -241,6 +226,28 @@ tr {
   -webkit-overflow-scrolling: touch; /* smooth scroll on iPhone */
 }
 
+
+
+/* 
+#dataTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+} */
+/* 
+#dataTable th,
+#dataTable td {
+  padding: 8px;
+  border: 1px solid #22d6be;
+  word-wrap: break-word;
+}
+ */
+
+
+
+
+
+
 /* Table styling */
 #dataTable {
   width: 100%;
@@ -267,7 +274,7 @@ tr {
 /* Optional: adjust font and padding for smaller screens */
 @media (max-width: 414px) { /* iPhone 11 width 414*/
   #dataTable th, #dataTable td {
-    font-size: 20pt;
+    font-size: 26px;
     padding: 8px;
     width: auto;
   }
@@ -308,8 +315,15 @@ td[contenteditable="true"]:hover {
   }
 }
 
-
+/* 
 td[contenteditable="true"] {
   -webkit-text-security: none;
-}
+} */
 
+td[contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-text-size-adjust: 100%;
+  text-security: none;       /* harmless fallback */
+  caret-color: #2cf7a9;
+}
