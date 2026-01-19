@@ -1,291 +1,240 @@
-  :root {
-    color-scheme: light dark;
-    --bg: #121212;
-    --fg: #eaeaea;
-    --accent: #2cf7a9;
-    --muted: #888;
-  }
+:root {
+  color-scheme: light dark;
+  --bg: #121212;
+  --fg: #eaeaea;
+  --accent: #2cf7a9;
+  --muted: #888;
+}
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 20px;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+}
 
-  h2, h3 ,h4 {
-    color:#e6f0eb;
-    margin: 3px;
-  }
+h2, h3 ,h4 {
+  color:#e6f0eb;
+  margin: 3px;
+}
 
-
-
-
-
-  .app-header {
-    position: sticky;
-    top: 10px;              /* sticks to top of viewport */
-    z-index: 100;        /* stay above table rows */
-    background-color: rgb(6, 119, 104); /* must have a background */
-    
-    display: flex;
-    align-items: flex-end;
-    gap: 12px;
-    padding: 8px;
-    margin: 10px 8px 5px 5px;
-    background-color: rgb(6, 119, 104);
-    border-bottom: 0px solid #9625d8;
-  }
-
-  .header-text h2, .header-text h4 {
-    margin-bottom: 1px;
-    margin-top: 1px;
-  }
-
-  .header-text h2 {
-    font-size: 26pt;   
-  }  
-
-  .app-icon {
-    width: 80px;
-    height: 80px;
-  }
-
-
-
-  .toolbartop {
-    position: sticky;
-    top: 118px;
-    z-index: 100;        /* stay above table rows */
-  }
-
-
-
-
-
-
-
-
-  .toolbartop, .toolbarbot {
-    display: flex;
-    justify-content:space-between; 
-    align-items: center;
-    gap: 10px;
-    padding: 10px 5px 10px 5px;
-    flex-wrap: wrap;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-  button, .import-label {
-    background: #276d06;
-    min-width: 45%;
-    min-height: 60px;
-    color: var(--fg);
-    border: 1px solid #d82323;
-    padding: 8px;
-    border-radius: 8px;
-    font-size: 20pt;
-  }
-
-
-  #addRowBtn, #addRowBtnb {
-    background: #9b7530;
-  }
-
-
-
-  #exportBtn, #exportBtnb {
-    background: #616126;
-  }
-
-
-
-
-
-  .import-label input {
-    display: none;
-
-  }
-
-
-
-  .table-wrap {
-      width: 100%;
-      padding: 5px;
-      box-sizing: border-box;
-      /* DON'T put overflow here */
-      /* overflow-x: auto;  <-- remove this */
-  }
-
+.app-header {
+  position: sticky;
+  top: 10px;              /* sticks to top of viewport */
+  z-index: 100;        /* stay above table rows */
+  background-color: rgb(6, 119, 104); /* must have a background */
   
-  
-  /* this is not working  */
-  #dataTable thead th {
-      position: sticky;
-      top: 0px;                  /* sticks to top of scroll container */
-      background-color: #101010; /* solid background */
-      z-index: 80;
-  }
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 8px;
+  margin: 10px 8px 5px 5px;
+  background-color: rgb(6, 119, 104);
+  border-bottom: 0px solid #9625d8;
+}
 
+.header-text h2, .header-text h4 {
+  margin-bottom: 1px;
+  margin-top: 1px;
+}
 
+.header-text h2 {
+  font-size: 26pt;   
+}  
 
-
-
-
-
-
-
-
-
-
-  /* .table-wrapper { */
-    /* overflow-x: auto; enable horizontal scroll */
-    /* -webkit-overflow-scrolling: touch; smooth scroll for iOS */
-    /* padding: 5px;  */
-  /* } */
-
-  
-.table-wrapper {
-    overflow-x: auto;        /* horizontal scroll only */
-    -webkit-overflow-scrolling: touch;
+.app-icon {
+  width: 80px;
+  height: 80px;
 }
 
 
 
 
-  /* #dataTable { */
-    /* width: 100%;       ensures table stretches within wrapper */
-    /* min-width: 600px;  optional: ensures table doesn’t shrink too small */
-    /* border-collapse: collapse; */
-  /* } */
+.toolbartop {
+  position: sticky;
+  background-color: #101010;
+  top: 118px;
+  z-index: 100;        /* stay above table rows */
+  display: flex;
+  justify-content:space-between; 
+  align-items: center;
+  gap: 10px;
+  padding: 10px 5px 10px 5px;
+  flex-wrap: wrap;
+}
 
+button, .import-label {
+  background: #276d06;
+  min-width: 45%;
+  min-height: 60px;
+  color: var(--fg);
+  border: 1px solid #d82323;
+  padding: 8px;
+  
+  border-radius: 8px;
+  font-size: 20pt;
+}
 
+#addRowBtn, #addRowBtnb {
+  background: #9b7530;
+}
 
+#exportBtn, #exportBtnb {
+  background: #616126;
+}
 
+.import-label input {
+  display: none;
+}
 
-
-
-  #dataTable {
-    width: 100%;               /* fill wrapper */
-    table-layout: fixed;       /* respects column widths */
-    border-collapse: collapse;
-    min-width: 0;              /* allow shrink on mobile */
-  }
-
-  /* .table-wrap {
+.table-wrap {
     width: 100%;
-    padding: 5px 5px 5px 5px; 
-    box-sizing: border-box;
-    overflow-x: auto;         
-    -webkit-overflow-scrolling: touch;
-  } */
-
-
-
-
-
-
-
-
-  #dataTable th, #dataTable td {
-    border: 5px solid #a823c9;
-    /* padding: 8px; */
-    text-align: left;
-  }
-
-
- 
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th, td {
-    border: 1px solid #d42424;
-    
     padding: 5px;
-    text-align: left;
-    min-height: 24px; 
-    height: 24px;
-    min-width: 120px; /* keeps cell readable on small screens */
-  }
+    padding-right: 8px;
+    box-sizing: border-box;
+    /* DON'T put overflow here */
+    /* overflow-x: auto;  <-- remove this */
+}
 
-  td[contenteditable="true"] {
-    background: #181818;
-    outline: none;
-    border-radius: 4px;
-  }
+/* this is not working  */
+/* #dataTable thead th { */
+    /* position: sticky; */
+    /* top: 0px;                  sticks to top of scroll container */
+    /* background-color: #101010; solid background */
+    /* z-index: 80; */
+/* } */
 
-  tr {
-    touch-action: pan-y; /* allow vertical scroll, we handle swipe horizontally */
-  }
+/* .table-wrapper { */
+  /* overflow-x: auto; enable horizontal scroll */
+  /* -webkit-overflow-scrolling: touch; smooth scroll for iOS */
+  /* padding: 5px;  */
+/* } */
 
-  .hint {
-    color: var(--muted);
-    padding: 8px 16px;
-  }
+.table-wrapper {
+    overflow-x: auto;        /* horizontal scroll only */
+    -webkit-overflow-scrolling: touch;
+}
 
-  /* Detail panel slides in from the right on swipe */
-  .detail-panel {
-    position: fixed;
-    top: 0; right: 0; bottom: 0;
-    width: min(90vw, 420px);
-    background: #101010;
-    border-left: 1px solid #9186ce;
-    transform: translateX(100%);
-    transition: transform 0.25s ease-out;
-    z-index: 1000;
-  }
+/* #dataTable { */
+  /* width: 100%;       ensures table stretches within wrapper */
+  /* min-width: 600px;  optional: ensures table doesn’t shrink too small */
+  /* border-collapse: collapse; */
+/* } */
 
-  .detail-panel.open {
-    transform: translateX(0);
-  }
+/* #dataTable { */
+  /* width: 100%;               fill wrapper */
+  /* table-layout: fixed;       respects column widths */
+/* /  border-collapse: collapse; */
+  /* min-width: 0;              allow shrink on mobile */
+/* } */
 
-  .detail-content {
-    padding: 16px;
-  }
+/* .table-wrap {
+  width: 100%;
+  padding: 5px 5px 5px 5px; 
+  box-sizing: border-box;
+  overflow-x: auto;         
+  -webkit-overflow-scrolling: touch;
+} */
 
-  .detail-content header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+/* #dataTable th, #dataTable td { */
+  /* border: 5px solid #a823c9; */
+  /* padding: 8px; */
+  /* text-align: left; */
+/* } */
 
-  .detail-field {
-    margin: 12px 0;
-  }
+#dataTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
 
-  .detail-field label {
-    display: block;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-
-  .detail-field input {
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: 1px solid #a7e0c1;
-    background: #181818;
-    color: var(--fg);
-  }
-
+#dataTable th,
+#dataTable td {
+  padding: 8px;
+  border: 1px solid #22d6be;
+  word-wrap: break-word;
+}
 
 
-  /* Make table responsive */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #d42424;
+  
+  padding: 5px;
+  text-align: left;
+  min-height: 24px; 
+  height: 24px;
+  min-width: 120px; /* keeps cell readable on small screens */
+}
+
+td[contenteditable="true"] {
+  background: #181818;
+  outline: none;
+  border-radius: 4px;
+}
+
+tr {
+  touch-action: pan-y; /* allow vertical scroll, we handle swipe horizontally */
+}
+
+.hint {
+  color: var(--muted);
+  padding: 8px 16px;
+}
+
+/* Detail panel slides in from the right on swipe */
+.detail-panel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: min(90vw, 420px);
+  background: #101010;
+  border-left: 1px solid #9186ce;
+  transform: translateX(100%);
+  transition: transform 0.25s ease-out;
+  z-index: 1000;
+}
+
+.detail-panel.open {
+  transform: translateX(0);
+}
+
+.detail-content {
+  padding: 16px;
+}
+
+.detail-content header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-field {
+  margin: 12px 0;
+}
+
+.detail-field label {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.detail-field input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #a7e0c1;
+  background: #181818;
+  color: var(--fg);
+}
+
+/* Make table responsive */
 .table-container {
   width: 100%;
   overflow-x: auto; /* allows horizontal scroll if needed */
@@ -317,16 +266,12 @@
 
 /* Optional: adjust font and padding for smaller screens */
 @media (max-width: 414px) { /* iPhone 11 width 414*/
-    
-  
   #dataTable th, #dataTable td {
     font-size: 20pt;
     padding: 8px;
     width: auto;
   }
 }
-
-
 
 /* Base editable cell */
 td[contenteditable="true"] {
@@ -353,6 +298,8 @@ td[contenteditable="true"]:hover {
   cursor: text;
 }
 
+
+
 /* Optional mobile tweak */
 @media (max-width: 414px) {
   td[contenteditable="true"] {
@@ -360,3 +307,9 @@ td[contenteditable="true"]:hover {
     padding: 10px;
   }
 }
+
+
+td[contenteditable="true"] {
+  -webkit-text-security: none;
+}
+
