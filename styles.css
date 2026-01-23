@@ -227,7 +227,6 @@ tr {
 }
 
 
-
 /* 
 #dataTable {
   width: 100%;
@@ -242,11 +241,6 @@ tr {
   word-wrap: break-word;
 }
  */
-
-
-
-
-
 
 /* Table styling */
 #dataTable {
@@ -304,8 +298,6 @@ td[contenteditable="true"]:hover {
   background-color: #5c0404;
   cursor: text;
 }
-
-
 
 /* Optional mobile tweak */
 @media (max-width: 414px) {

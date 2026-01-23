@@ -19,70 +19,64 @@ const clearBtn = document.getElementById('clearBtn');
 const COLUMNS = ['A','B'];   
 
 // ---------------- Backend URL ----------------
-const BACKEND_URL = 'https://gatekeeper-backend-qh08.onrender.com'; // your Render backend URL
+//const BACKEND_URL = 'https://gatekeeper-backend-qh08.onrender.com'; // your Render backend URL
 //const BACKEND_URL = 'http://192.168.1.12:10000';
+
+
+// ---------------- Backend URL for worker KV on cloudfare ----------------
+const BACKEND_URL = 'https://gatekeeper-worker.gatekeeper2.workers.dev';
+
+
 
 console.log('tableBody:', tableBody);
 
 
-// ---------------- Save table ----------------
+
+// for CloudFare ================================================================= 
 function saveTable() {
   if (isLoading) return;
 
   const data = [];
-
-  // Always include header row first
-  data.push(["Location", "Number"]);
-
+  // Collect all rows including header
   tableBody.querySelectorAll('tr').forEach(tr => {
     const row = [];
-
-    // Remove any extra columns beyond COLUMNS.length
-    while (tr.children.length > COLUMNS.length) {
-      tr.removeChild(tr.lastChild);
-    }
-
-    // Collect exactly the columns you want
-    tr.querySelectorAll('td').forEach((td, i) => {
-      row.push(td.textContent);
+    tr.querySelectorAll('td').forEach(td => {
+      const input = td.querySelector('input');
+      row.push(input ? input.value : td.textContent);
     });
-
-    // If row has less columns, fill with empty string
-    while (row.length < COLUMNS.length) {
-      row.push('');
-    }
-
     data.push(row);
   });
 
-  // Send to backend
   fetch(`${BACKEND_URL}/save`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
-  .then(res => res.json())
-  .then(r => console.log('Table saved', r))
-  .catch(err => console.error('Save error', err));
+    .then(res => res.json())
+    .then(r => console.log('Table saved', r))
+    .catch(err => console.error('Save error', err));
 }
 
 
-// ---------------- Load table ----------------
+
+// for CloudFare ================================================================= 
 function loadTable() {
   isLoading = true;
   tableBody.innerHTML = '';
 
-  fetch(`${BACKEND_URL}/load?ts=${Date.now()}`)
-    .then(res => res.json())
+  fetch(`${BACKEND_URL}/latest?ts=${Date.now()}`)
+    .then(res => {
+      if (!res.ok) throw new Error('No snapshot yet');
+      return res.json();
+    })
     .then(data => {
       if (!data || data.length <= 1) {
-        // No data rows, create one blank row
         createRow();
         saveTable();
       } else {
-        // Skip the first row (headers)
-        data.slice(1).forEach(row => {
-          // Only take first COLUMNS.length items
+        // Include all rows, including header if you want
+        data.forEach((row, rowIndex) => {
+          // Optionally skip header row: if(rowIndex === 0) return;
           createRow(row.slice(0, COLUMNS.length));
         });
       }
@@ -97,48 +91,8 @@ function loadTable() {
 }
 
 
-// ---------------- CREATE ROW Table manipulation ----------------
-
-// function createRow(data = []) {
-//   const tr = document.createElement('tr');
-//   for (let i = 0; i < COLUMNS.length; i++) {
 
 
-//     const td = document.createElement('td');
-
-    
-//     td.contentEditable = "true";
-//     td.textContent = data[i] || '';
-//     td.setAttribute('autocomplete', 'off');
-//     td.setAttribute('autocorrect', 'off');
-//     td.setAttribute('autocapitalize', 'off');
-//     td.setAttribute('spellcheck', 'false');
-
-
-
-
-
-
-
-//     // ---------------- Autosave with 3-second debounce + blur-save ----------------
-//     let saveTimeout;
-
-//     td.addEventListener('input', () => {
-//       if (isLoading) return;
-//       clearTimeout(saveTimeout);
-//       saveTimeout = setTimeout(saveTable, 3000); // 3s after last keystroke
-//     });
-
-//     td.addEventListener('blur', () => {
-//       if (isLoading) return;
-//       clearTimeout(saveTimeout); // cancel any pending debounce
-//       saveTable();               // save immediately when leaving cell
-//     });
-
-//     tr.appendChild(td);
-//   }
-//   tableBody.appendChild(tr);
-// }
 
 
 
@@ -176,15 +130,6 @@ function createRow(data = []) {
   }
   tableBody.appendChild(tr);
 }
-
-
-
-
-
-
-
-
-
 
 
 // ---------------- Buttons ----------------
@@ -273,6 +218,138 @@ loadTable();
 
 
 
+
+
+
+
+
+
+
+
+
+
+// // ---------------- Load table ----------------
+// function loadTable() {
+//   isLoading = true;
+//   tableBody.innerHTML = '';
+
+//   fetch(`${BACKEND_URL}/load?ts=${Date.now()}`)
+//     .then(res => res.json())
+//     .then(data => {
+//       if (!data || data.length <= 1) {
+//         // No data rows, create one blank row
+//         createRow();
+//         saveTable();
+//       } else {
+//         // Skip the first row (headers)
+//         data.slice(1).forEach(row => {
+//           // Only take first COLUMNS.length items
+//           createRow(row.slice(0, COLUMNS.length));
+//         });
+//       }
+//       isLoading = false;
+//       console.log('Table loaded', data);
+//     })
+//     .catch(err => {
+//       console.error('Load error', err);
+//       isLoading = false;
+//       createRow();
+//     });
+// }
+
+
+
+
+
+// // ---------------- Save table ----------------
+// function saveTable() {
+//   if (isLoading) return;
+
+//   const data = [];
+
+//   // Always include header row first
+//   data.push(["Location", "Number"]);
+
+//   tableBody.querySelectorAll('tr').forEach(tr => {
+//     const row = [];
+
+//     // Remove any extra columns beyond COLUMNS.length
+//     while (tr.children.length > COLUMNS.length) {
+//       tr.removeChild(tr.lastChild);
+//     }
+
+//     // Collect exactly the columns you want
+//     tr.querySelectorAll('td').forEach((td, i) => {
+//       row.push(td.textContent);
+//     });
+
+//     // If row has less columns, fill with empty string
+//     while (row.length < COLUMNS.length) {
+//       row.push('');
+//     }
+
+//     data.push(row);
+//   });
+
+//   // Send to backend
+//   fetch(`${BACKEND_URL}/save`, {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify(data)
+//   })
+//   .then(res => res.json())
+//   .then(r => console.log('Table saved', r))
+//   .catch(err => console.error('Save error', err));
+// }
+
+
+
+
+
+
+
+// ---------------- CREATE ROW Table manipulation ----------------
+
+// function createRow(data = []) {
+//   const tr = document.createElement('tr');
+//   for (let i = 0; i < COLUMNS.length; i++) {
+
+
+//     const td = document.createElement('td');
+
+    
+//     td.contentEditable = "true";
+//     td.textContent = data[i] || '';
+//     td.setAttribute('autocomplete', 'off');
+//     td.setAttribute('autocorrect', 'off');
+//     td.setAttribute('autocapitalize', 'off');
+//     td.setAttribute('spellcheck', 'false');
+
+
+
+
+
+
+
+//     // ---------------- Autosave with 3-second debounce + blur-save ----------------
+//     let saveTimeout;
+
+//     td.addEventListener('input', () => {
+//       if (isLoading) return;
+//       clearTimeout(saveTimeout);
+//       saveTimeout = setTimeout(saveTable, 3000); // 3s after last keystroke
+//     });
+
+//     td.addEventListener('blur', () => {
+//       if (isLoading) return;
+//       clearTimeout(saveTimeout); // cancel any pending debounce
+//       saveTable();               // save immediately when leaving cell
+//     });
+
+//     tr.appendChild(td);
+//   }
+//   tableBody.appendChild(tr);
+// }
 
 
 // // ---------------- Save table ----------------

@@ -1,4 +1,5 @@
 const CACHE_NAME = 'table-pwa-v1';
+// this is switch.js
 const ASSETS = [
   './',
   './index.html',
@@ -28,3 +29,5 @@ self.addEventListener('fetch', event => {
     caches.match(event.request).then(resp => resp || fetch(event.request))
   );
 });
+
+

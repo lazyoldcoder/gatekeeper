@@ -67,31 +67,47 @@
   <script src="app.js?v=123456"></script>
    
   
-  <!-- <script>
-    // Register Service Worker (required for PWA install/offline on iOS with HTTPS)
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js');
-      });
-    }
-  </script> -->
-  
-    <!-- JSON debug panel -->
-  <!-- <div style="background-color: rgb(100, 4, 4); max-width: 280px;">
-    <h3>JSON from backend</h3>
-    <pre id="output" style="font-size: 10pt";>Loading...</pre>
-    <script>
-      fetch('http://localhost:10000/load')
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById('output').textContent = JSON.stringify(data, null, 2);
-        })
-        .catch(err => {
-          document.getElementById('output').textContent = 'Error: ' + err;
-          console.error(err);
-        });
-    </script>
-  </div>  -->
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    // Register Service Worker (required for PWA install/offline on iOS with HTTPS)
+    // if ('serviceWorker' in navigator) {
+    //   window.addEventListener('load', () => {
+    //     navigator.serviceWorker.register('sw.js');
+    //   });
+    // }
+
+  // JSON debug panel
+
+  // <div style="background-color: rgb(100, 4, 4); max-width: 280px;">
+  //   <h3>JSON from backend</h3>
+  //   <pre id="output" style="font-size: 10pt";>Loading...</pre>
+  // </div>
+
+  // fetch('http://localhost:10000/load')
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+  //   })
+  //   .catch(err => {
+  //     document.getElementById('output').textContent = 'Error: ' + err;
+  //     console.error(err);
+  //   });
+</script>
+  
